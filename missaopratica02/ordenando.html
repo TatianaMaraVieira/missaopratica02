@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ordenação de Valores</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <main class="mt-4 container-fluid">
+      <h1 class="mb-4">Ordenando Valores</h1>
+      <div class="mb-3">
+        <label for="valor" class="form-label">Valor</label>
+        <input type="number" class="form-control-md" id="valor" />
+      </div>
+      <div class="input-buttons">
+        <button class="btn btn-primary px-3" onclick="add()" id="addElement">
+          Adicionar
+        </button>
+      </div>
+      <hr />
+      <div class="mb-3">
+        <select class="form-select p-1" id="algoritmo">
+          <option value="bubbleSort" selected>Bubble Sort</option>
+          <option value="insertionSort">Insertion Sort</option>
+          <option value="selectionSort">Selection Sort</option>
+          <option value="quickSort">Quick Sort</option>
+        </select>
+      </div>
+      <div class="sorting-buttons">
+        <button type="submit" class="btn btn-primary px-3" onclick="ordenar()">
+          Ordenar
+        </button>
+        <button
+          type="submit"
+          class="btn btn-custom btn-primary px-3"
+          onclick="misturar()"
+        >
+          Misturar
+        </button>
+      </div>
+      <hr />
+      <ul id="valores"></ul>
+    </main>
+    <footer></footer>
+    <script src="./ordenando.js"></script>
+    <script>
+      function add() {
+        const valorInput = document.getElementById("valor");
+        const valor = parseInt(valorInput.value);
+        const valoresList = document.getElementById("valores");
+
+        if (!isNaN(valor)) {
+          const listItem = document.createElement("li");
+          listItem.textContent = valor;
+          valoresList.appendChild(listItem);
+          valorInput.value = "";
+        }
+      }
+
+      function ordenar() {
+        const algoritmoSelect = document.getElementById("algoritmo");
+        const valoresList = document.getElementById("valores");
+        const valores = Array.from(valoresList.children).map((item) =>
+          parseInt(item.textContent)
+        );
+
+        const algoritmo = algoritmoSelect.value;
+
+        if (algoritmo === "bubbleSort") {
+          bubbleSort(valores);
+        } else if (algoritmo === "insertionSort") {
+          insertionSort(valores);
+        } else if (algoritmo === "selectionSort") {
+          selectionSort(valores);
+        } else if (algoritmo === "quickSort") {
+          quickSort(valores, 0, valores.length - 1);
+        }
+
+        valoresList.innerHTML = "";
+        valores.forEach((valor) => {
+          const listItem = document.createElement("li");
+          listItem.textContent = valor;
+          valoresList.appendChild(listItem);
+        });
+      }
+      function misturar() {
+        const valoresList = document.getElementById("valores");
+
+        const children = valoresList.children;
+        const valores = [];
+        for (let i = 0; i < children.length; i++) {
+          valores.push(parseInt(children[i].textContent));
+        }
+
+        shuffle(valores, valores.length);
+
+        valoresList.innerHTML = valores
+          .map(function (valor) {
+            return "<li>" + valor + "</li>";
+          })
+          .reduce(function (accumulator, currentValue) {
+            return accumulator + currentValue;
+          }, "");
+      }
+    </script>
+  </body>
+</html>
